@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract WeeklyPlanner {
+
+    address public owner;
+
+    // Store a task for each day (0 = Sunday, 6 = Saturday)
+    string[7] public tasks;
+
+    constructor() {
+        owner = msg.sender; // Owner is the deployer
+    }
+
+    // Modifier to restrict updates only to the owner
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not authorized!");
+        _;
+    }
+
+    // Set task for a particular day
+    function setTask(uint dayIndex, string memory task) public onlyOwner {
+        require(dayIndex < 7, "Day must be 0-6");
+        tasks[dayIndex] = task;
+    }
+
+    // Get the task for a particular day
+    function getTask(uint dayIndex) public view returns (string memory) {
+        require(dayIndex < 7, "Day must be 0-6");
+        return tasks[dayIndex];
+    }
+}
